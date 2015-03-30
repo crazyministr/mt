@@ -16,6 +16,12 @@ public class ExpressionsParser {
     }
 
     private ArrayList<String> prepareParsing(String expression) {
+        /***
+         * Analysis of expression into tokens
+         *
+         * @param expression The input expression
+         * @return array with tokens
+         */
         ArrayList<String> expressionTokens = new ArrayList<>();
         String number = "";
         for (char ch: expression.toCharArray()) {
@@ -53,14 +59,28 @@ public class ExpressionsParser {
     }
 
     public ArrayList<String> getTokens() {
+        /***
+         * @return array of tokens
+         */
         return tokens;
     }
 
     private static boolean isOperator(String token) {
+        /***
+         * @param token any token
+         * @return true if then <item>token</item> is operator
+         */
         return token.equals("+") || token.equals("-") || token.equals("*") || token.equals("/");
     }
 
     private static int priorityOperators(String token1, String token2) {
+        /***
+         * Checking for priotiry operators
+         *
+         * @params token1 token2 any tokens
+         * @return <int>0</int> if operators is equals else
+         *         <int>-1</int> if <item>token1</item> has low priority else <int>1</int>
+         */
         if (token1.equals(token2)) {
             return 0;
         }
@@ -69,6 +89,15 @@ public class ExpressionsParser {
     }
 
     private void reversePolishNotation(ArrayList<String> expressionTokens) {
+        /***
+         * Properly algorithm
+         * Algorithm name is <algoname>Reverse Polish Notation</algoname> or
+         * <algoname>Shunting-yard algorithm</algoname>
+         *
+         * Analysis input tokens and makes a sequence of tokens according to the algorithm
+         *
+         * Saving occurs in the <class_field>this.token</class_field>
+         */
         Stack<String> stack = new Stack<>();
         for (String token : expressionTokens) {
             if (isOperator(token))
@@ -98,6 +127,11 @@ public class ExpressionsParser {
     }
 
     public double eval() {
+        /***
+         * Calculating result based on the <class_field>this.token</class_field>
+         *
+         * @return result of calculation
+         */
         Stack<String> stack = new Stack<>();
         for (String token : tokens) {
             if (!isOperator(token)) {
