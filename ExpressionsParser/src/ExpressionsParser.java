@@ -16,7 +16,7 @@ public class ExpressionsParser {
     }
 
     private ArrayList<String> prepareParsing(String expression) {
-        ArrayList<String> expressionTokens = new ArrayList<String>();
+        ArrayList<String> expressionTokens = new ArrayList<>();
         String number = "";
         for (char ch: expression.toCharArray()) {
             if (ch == ' ') {
@@ -24,6 +24,18 @@ public class ExpressionsParser {
             }
             if (ch == '(' || ch == ')' || isOperator(Character.toString(ch))) {
                 if (!number.equals("")) {
+                    if (expressionTokens.size() > 0 && expressionTokens.get(expressionTokens.size() - 1).equals("-")) {
+                        if (expressionTokens.size() > 1) {
+                            String prevToken = expressionTokens.get(expressionTokens.size() - 2);
+                            if (prevToken.equals("(")) {
+                                expressionTokens.remove(expressionTokens.size() - 1);
+                                number = "-" + number;
+                            }
+                        } else {
+                            expressionTokens.remove(expressionTokens.size() - 1);
+                            number = "-" + number;
+                        }
+                    }
                     expressionTokens.add(number);
                 }
                 expressionTokens.add(Character.toString(ch));
@@ -31,7 +43,7 @@ public class ExpressionsParser {
             } else if (ch >= '0' && ch <= '9') {
                 number += ch;
             } else {
-                throw new IllegalArgumentException("Invalid token: " + ch);
+                throw new IllegalArgumentException("Unknown token: " + ch);
             }
         }
         if (!number.equals("")) {
@@ -91,12 +103,20 @@ public class ExpressionsParser {
             if (!isOperator(token)) {
                 stack.push(token);
             } else {
-                Double d2 = Double.valueOf(stack.pop());
-                Double d1 = Double.valueOf(stack.pop());
-
                 char t = token.charAt(0);
-                Double res = t == '+' ? d1 + d2 : t == '-' ? d1 - d2 : t == '*' ? d1 * d2 : d1 / d2;
-                stack.push(String.valueOf(res));
+                Double y = Double.valueOf(stack.pop());
+                if (stack.empty()) {
+                    if (t == '-') {
+                        y = -y;
+                        stack.push(y.toString());
+                    } else {
+                        throw new IllegalArgumentException("Incorrect token: " + t);
+                    }
+                } else {
+                    Double x = Double.valueOf(stack.pop());
+                    Double res = t == '+' ? x + y : t == '-' ? x - y : t == '*' ? x * y : x / y;
+                    stack.push(String.valueOf(res));
+                }
             }
         }
         return Double.valueOf(stack.pop());
