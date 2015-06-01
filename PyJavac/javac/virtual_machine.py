@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+
+
 class VirtualMachine:
     def __init__(self, file_name):
         self.instructions = self._parse_instructions(file_name)
@@ -7,12 +9,7 @@ class VirtualMachine:
         var = [0 for i in xrange(26)]
         stack = []
         addr = 0
-        step = 0
         while True:
-            step += 1
-            if step == 100:
-                break
-
             instruction = self.instructions[addr]
             addr += 1
 
@@ -44,6 +41,12 @@ class VirtualMachine:
                 else:
                     stack[-2] = 0
                 stack.pop()
+            elif op == 'gt':
+                if stack[-2] > stack[-1]:
+                    stack[-2] = 1
+                else:
+                    stack[-2] = 0
+                stack.pop()
             elif op == 'jz':
                 if stack.pop() == 0:
                     addr = arg
@@ -55,7 +58,7 @@ class VirtualMachine:
             elif op == 'return':
                 break
 
-        print 'Execution finished.'
+        print 'Variables:'
         for i in xrange(26):
             if var[i] != 0:
                 print '%c = %d' % (chr(i + ord('a')), var[i])

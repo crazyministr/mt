@@ -13,7 +13,7 @@ class Node:
 
 
 class Parser:
-    VAR, CONST, ADD, SUB, LT, SET, IF1, IF2, WHILE, DO, EMPTY, SEQ, EXPR, PROGRAM = range(14)
+    VAR, CONST, ADD, SUB, LT, GT, SET, IF1, IF2, WHILE, DO, EMPTY, SEQ, EXPR, PROGRAM = range(15)
 
     def __init__(self):
         self.lexer = Lexer()
@@ -55,6 +55,9 @@ class Parser:
         if self.token_type == Lexer.LESS:
             self.next_token()
             n = Node(Parser.LT, op1=n, op2=self.add())
+        if self.token_type == Lexer.GREAT:
+            self.next_token()
+            n = Node(Parser.GT, op1=n, op2=self.add())
         return n
 
     def expr(self):

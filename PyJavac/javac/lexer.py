@@ -3,15 +3,15 @@ import sys
 
 
 class Lexer(object):
-    NUM, ID, IF, ELSE, WHILE, DO, LBRA, RBRA, LPAR, RPAR, PLUS, MINUS, LESS, \
-        EQUAL, SEMICOLON, EOF = range(16)
+    NUM, ID, IF, ELSE, WHILE, DO, LBRA, RBRA, LPAR, RPAR, PLUS, MINUS, LESS, GREAT, \
+        EQUAL, SEMICOLON, EOF = range(17)
 
     SYMBOLS = {'{': LBRA, '}': RBRA,
                '=': EQUAL,
                ';': SEMICOLON,
                '(': LPAR, ')': RPAR,
                '+': PLUS, '-': MINUS,
-               '<': LESS}
+               '<': LESS, '>': GREAT}
 
     WORDS = {'if': IF, 'else': ELSE, 'do': DO, 'while': WHILE}
 

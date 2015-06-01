@@ -10,12 +10,13 @@ class JVMInstructions(object):
         ADD       - сложить два числа на вершине стека
         SUB       - вычесть два числа на вершине стека
         LT        - сравнить два числа с вершины стека (a < b). Результат - 0 или 1
+        GT        - сравнить два числа с вершины стека (a > b). Результат - 0 или 1
         JZ <a>    - если на вершине стека 0 - перейти к адресу a.
         JNZ <a>   - если на вершине стека не 0 - перейти к адресу a.
         GOTO <a>  - перейти к адресу a
         RETURN    - завершить работу
     """
-    LOAD, STORE, CONST, POP, ADD, SUB, LT, JZ, JNZ, GOTO, RETURN = range(11)
+    LOAD, STORE, CONST, POP, ADD, SUB, LT, GT, JZ, JNZ, GOTO, RETURN = range(12)
 
     to_str = {LOAD: 'load',
               STORE: 'store',
@@ -24,6 +25,7 @@ class JVMInstructions(object):
               ADD: 'add',
               SUB: 'sub',
               LT: 'lt',
+              GT: 'gt',
               JZ: 'jz',
               JNZ: 'jnz',
               GOTO: 'goto',

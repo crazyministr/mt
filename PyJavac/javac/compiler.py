@@ -35,6 +35,10 @@ class Compiler:
             self._compile(node.op1)
             self._compile(node.op2)
             self.add_command(JVMInstructions.LT)
+        elif node.kind == Parser.GT:
+            self._compile(node.op1)
+            self._compile(node.op2)
+            self.add_command(JVMInstructions.GT)
         elif node.kind == Parser.SET:
             self._compile(node.op2)
             self.add_command(JVMInstructions.STORE, node.op1.value)
