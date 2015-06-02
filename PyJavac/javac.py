@@ -4,8 +4,8 @@ from javac.compiler import Compiler
 
 
 def main():
-    # file_name = sys.argv[1]
-    file_name = "example.java"
+    file_name = sys.argv[1]
+    # file_name = "example.java"
 
     compiler = Compiler()
     jvm_instructions = compiler.compile(file_name)
