@@ -18,6 +18,7 @@ https://en.wikipedia.org/wiki/Shunting-yard_algorithm
 #include <vector> // for vector
 #include <stack> // for stack
 #include <sstream> // for istringstream
+#include <iostream>
 
 using namespace std;
 
@@ -71,7 +72,7 @@ void parse_expression(string expression) {
     }
 }
 
-bool priority_operation(string x, string y) {
+int priority_operation(string x, string y) {
 	/**
 		Функция принимает 2 оператора
 		Возвращает 0, если операторы одинаковы
