@@ -6,7 +6,7 @@ class VirtualMachine:
         self.instructions = self._parse_instructions(file_name)
 
     def run(self):
-        var = [0 for i in xrange(26)]
+        variables = {}
         stack = []
         addr = 0
         while True:
@@ -17,16 +17,17 @@ class VirtualMachine:
             if instruction.find(' ') > -1:
                 operation = instruction.split(' ')
 
+            arg = ''
             op = operation[0]
             if len(operation) > 1:
-                arg = int(operation[1])
+                arg = operation[1]
 
             if op == 'load':
-                stack.append(var[arg])
+                stack.append(variables[arg])
             elif op == 'store':
-                var[arg] = stack[-1]
+                variables[arg] = stack[-1]
             elif op == 'const':
-                stack.append(arg)
+                stack.append(int(arg))
             elif op == 'pop':
                 stack.pop()
             elif op == 'add':
@@ -49,19 +50,18 @@ class VirtualMachine:
                 stack.pop()
             elif op == 'jz':
                 if stack.pop() == 0:
-                    addr = arg
+                    addr = int(arg)
             elif op == 'jnz':
                 if stack.pop() != 0:
-                    addr = arg
+                    addr = int(arg)
             elif op == 'goto':
-                addr = arg
+                addr = int(arg)
             elif op == 'return':
                 break
 
         print 'Variables:'
-        for i in xrange(26):
-            if var[i] != 0:
-                print '%c = %d' % (chr(i + ord('a')), var[i])
+        for k, v in variables.items():
+            print k, '=', v
 
     def _parse_instructions(self, file_name):
         _file = open(file_name, 'r')

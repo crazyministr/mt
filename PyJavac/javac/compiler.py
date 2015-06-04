@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from javac.jvm_insructions import *
 from javac.parser import Parser
+from javac.lexer import Lexer
 
 
 class Compiler:
@@ -19,36 +20,36 @@ class Compiler:
         self.addr += 1
 
     def _compile(self, node):
-        if node.kind == Parser.VAR:
+        if node.kind == Lexer.VAR:
             self.add_command(JVMInstructions.LOAD, node.value)
-        elif node.kind == Parser.CONST:
+        elif node.kind == Lexer.INT:
             self.add_command(JVMInstructions.CONST, node.value)
-        elif node.kind == Parser.ADD:
+        elif node.kind == Lexer.PLUS:
             self._compile(node.op1)
             self._compile(node.op2)
             self.add_command(JVMInstructions.ADD)
-        elif node.kind == Parser.SUB:
+        elif node.kind == Lexer.MINUS:
             self._compile(node.op1)
             self._compile(node.op2)
             self.add_command(JVMInstructions.SUB)
-        elif node.kind == Parser.LT:
+        elif node.kind == Lexer.LESS:
             self._compile(node.op1)
             self._compile(node.op2)
             self.add_command(JVMInstructions.LT)
-        elif node.kind == Parser.GT:
+        elif node.kind == Lexer.GREAT:
             self._compile(node.op1)
             self._compile(node.op2)
             self.add_command(JVMInstructions.GT)
-        elif node.kind == Parser.SET:
+        elif node.kind == Lexer.EQUAL:
             self._compile(node.op2)
             self.add_command(JVMInstructions.STORE, node.op1.value)
-        elif node.kind == Parser.IF1:
+        elif node.kind == Lexer.IF:
             self._compile(node.op1)
             addr = self.addr
             self.add_command(JVMInstructions.JZ, addr=0)
             self._compile(node.op2)
             self.jvm_instructions[addr] = self.jvm_instructions[addr][:-1] + str(self.addr)
-        elif node.kind == Parser.IF2:
+        elif node.kind == Lexer.ELSE:
             self._compile(node.op1)
             addr1 = self.addr
             self.add_command(JVMInstructions.JZ, addr=0)
@@ -58,7 +59,7 @@ class Compiler:
             self.jvm_instructions[addr1] = self.jvm_instructions[addr1][:-1] + str(self.addr)
             self._compile(node.op3)
             self.jvm_instructions[addr2] = self.jvm_instructions[addr2][:-1] + str(self.addr)
-        elif node.kind == Parser.WHILE:
+        elif node.kind == Lexer.WHILE:
             addr1 = self.addr
             self._compile(node.op1)
             addr2 = self.addr
@@ -66,18 +67,18 @@ class Compiler:
             self._compile(node.op2)
             self.add_command(JVMInstructions.GOTO, addr=addr1)
             self.jvm_instructions[addr2] = self.jvm_instructions[addr2][:-1] + str(self.addr)
-        elif node.kind == Parser.DO:
+        elif node.kind == Lexer.DO:
             addr = self.addr
             self._compile(node.op1)
             self._compile(node.op2)
             self.add_command(JVMInstructions.JNZ, addr=addr)
-        elif node.kind == Parser.SEQ:
+        elif node.kind == Lexer.RBRA:
             self._compile(node.op1)
             self._compile(node.op2)
-        elif node.kind == Parser.EXPR:
+        elif node.kind == Lexer.EXPR:
             self._compile(node.op1)
             self.add_command(JVMInstructions.POP)
-        elif node.kind == Parser.PROGRAM:
+        elif node.kind == Lexer.EOF:
             self._compile(node.op1)
             self.add_command(JVMInstructions.RETURN)
 
